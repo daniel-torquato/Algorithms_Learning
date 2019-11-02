@@ -1,104 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int check_adjacence_cell(int **grid, int *flag, int i, int j, int n, int m)
+
+int goto_next_cell(int **grid, int n, int m, int i, int j, int *flag, int *lvl)
 {
-	if (i>=n || j>=m || i<0 || j<0)
-		return -1;
-
-	int val=0;
-	int was=0, will=0;
-
-	if (!grid[i][j])
+	if (grid[i][j]<1)
 		return 0;
 
+	grid[i][j]=-1-*lvl;
 
-	if ((i>0 && grid[i-1][j])) {
-		was++;
-		grid[i][j]=grid[i-1][j];
-	}
-
-	if (j>0 && grid[i][j-1]) {
-		was++;
-		grid[i][j]=grid[i][j-1];
-	}
-
-	if ((i<n-1 && grid[i+1][j]) && !!was) {
-		(*flag)++;
-		will++;
-	}
-
-	if (j<m-1 && grid[i][j+1] && !!was && !will) {
-		(*flag)++;
-	}
-
-	grid[i][j]=-(*flag);
-
-}
-
-int get_count_in_col(int **grid, int j, int n)
-{
-	int i;
-	int len=0, val=0;
-	for (i=0; i<n; i++) {
-#ifdef MEM_DEBUG
-		printf("%d ", grid[i]+j);
-#endif
-		if (grid[i][j]) {
-			val++;
-		} else {
-			if (val>1)
-				len++;
-			val=0;
+	if (i<n-1 && grid[i+1][j]>0) {
+		if (!*flag) {
+			(*lvl)++;
+			*flag=1;
 		}
-#ifdef DEBUG
-		printf(">%d ", grid[i][j], len);
-#endif
+		goto_next_cell(grid, n, m, i+1, j, flag, lvl);
 	}
-#ifdef DEBUG
-	printf("\n");
-#endif
-	if (val>1)
-		len++;
 
-	return len;
-}
-
-int get_count_in_row(int **grid, int i, int m)
-{
-	int j;
-	int len=0, val=0;
-	for (j=0; j<m; j++) {
-#ifdef MEM_DEBUG
-		printf("%d ", grid[i]+j);
-#endif
-		if (grid[i][j]) {
-			val++;
-		} else {
-			if (val>1)
-				len++;
-			val=0;
+	if (j<m-1 && grid[i][j+1]>0) {
+		if (!(*flag)) {
+			(*lvl)++;
+			*flag=1;
 		}
-#ifdef DEBUG
-		printf(">%d ", grid[i][j], len);
-#endif
+		goto_next_cell(grid, n, m, i, j+1, flag, lvl);
 	}
-#ifdef DEBUG
-	printf("\n");
-#endif
-	if (val>1)
-		len++;
-	return len;
+
+	if ((i>0 && grid[i-1][j])>0) {
+		if (!(*flag)) {
+			(*lvl)++;
+			*flag=1;
+		}
+		goto_next_cell(grid, n, m, i-1, j, flag, lvl);
+	}
+
+	if (j>0 && grid[i][j-1]>0) {
+		if (!(*flag)) {
+			(*lvl)++;
+			*flag=1;
+		}
+		goto_next_cell(grid, n, m, i, j-1, flag, lvl);
+	}
 }
 
 int get_cont(int **grid, int n, int m)
 {
-	int ret=0;
+	int ret=0, flag=0;
 	int i, j;
 	for(i=0; i<n; i++)
-		ret+=get_count_in_row(grid, i, m);
-	for(j=0; j<m; j++)
-		ret+=get_count_in_col(grid, j, n);
+		for(j=0; j<m; j++) {
+			goto_next_cell(grid, n, m, i, j, &flag, &ret);
+			flag=0;
+#ifdef DEBUG
+			printf("%d ", ret);
+#endif
+		}
+			//check_adjacence_cell(grid, &ret, i, j, n, m);
 
 	return ret;
 }
@@ -140,6 +96,18 @@ void free_matrix(int **matrix, int n, int m)
 	free(matrix);
 }
 
+void print_matrix(int **matrix, int n, int m)
+{
+	int i, j;
+	printf("\n");
+	for (i=0; i<n; i++) {
+		for (j=0; j<m; j++) {
+			printf("%d ", matrix[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 int main()
 {
 	int n, m;
@@ -166,6 +134,9 @@ int main()
 	}
 
 	printf("%d", get_cont(grid, n, m));
+#ifdef DEBUG
+	print_matrix(grid, n, m);
+#endif
 	free_matrix(grid, n, m);
 
 	return 0;

@@ -1,8 +1,14 @@
 all:
 	@gcc src/main.c -o bin/main
 
-debug:
+print:
 	gcc src/main.c -DDEBUG -o bin/main
+	@for t in `ls dat/`; do\
+		cat dat/$$t | bin/main; \
+	done
+
+debug:
+	gcc -g src/main.c -o bin/main
 	@for t in `ls dat/`; do\
 		cat dat/$$t | bin/main; \
 	done
@@ -12,7 +18,6 @@ alloc:
 	@for t in `ls dat/`; do\
 		cat dat/$$t | bin/main; \
 	done
-
 
 test:
 	gcc src/main.c -o bin/main
