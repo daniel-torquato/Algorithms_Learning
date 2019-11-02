@@ -11,7 +11,6 @@ int goto_next_cell(int **grid, int n, int m, int i, int j, int *flag, int *lvl)
 
 	if (i<n-1 && grid[i+1][j]>0) {
 		if (!*flag) {
-			(*lvl)++;
 			*flag=1;
 		}
 		goto_next_cell(grid, n, m, i+1, j, flag, lvl);
@@ -19,7 +18,6 @@ int goto_next_cell(int **grid, int n, int m, int i, int j, int *flag, int *lvl)
 
 	if (j<m-1 && grid[i][j+1]>0) {
 		if (!(*flag)) {
-			(*lvl)++;
 			*flag=1;
 		}
 		goto_next_cell(grid, n, m, i, j+1, flag, lvl);
@@ -27,7 +25,6 @@ int goto_next_cell(int **grid, int n, int m, int i, int j, int *flag, int *lvl)
 
 	if ((i>0 && grid[i-1][j])>0) {
 		if (!(*flag)) {
-			(*lvl)++;
 			*flag=1;
 		}
 		goto_next_cell(grid, n, m, i-1, j, flag, lvl);
@@ -35,7 +32,6 @@ int goto_next_cell(int **grid, int n, int m, int i, int j, int *flag, int *lvl)
 
 	if (j>0 && grid[i][j-1]>0) {
 		if (!(*flag)) {
-			(*lvl)++;
 			*flag=1;
 		}
 		goto_next_cell(grid, n, m, i, j-1, flag, lvl);
@@ -48,7 +44,10 @@ int get_cont(int **grid, int n, int m)
 	int i, j;
 	for(i=0; i<n; i++)
 		for(j=0; j<m; j++) {
-			goto_next_cell(grid, n, m, i, j, &flag, &ret);
+			if (grid[i][j]>0) {
+				ret++;
+				goto_next_cell(grid, n, m, i, j, &flag, &ret);
+			}
 			flag=0;
 #ifdef DEBUG
 			printf("%d ", ret);
