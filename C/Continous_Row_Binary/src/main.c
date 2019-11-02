@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 int find_conex_element(int **grid, int n, int m, int i, int j, int *flag)
 {
 	if (grid[i][j]<1)
@@ -93,7 +92,7 @@ int main()
 
 	for (i=0; i<n; i++) {
 		for (j=0; j<m; j++) {
-			scanf("%d", grid[i]+j);
+			scanf("%d", &grid[i][j]);
 		}
 	}
 

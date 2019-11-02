@@ -13,12 +13,6 @@ debug:
 		cat dat/$$t | bin/main; \
 	done
 
-alloc:
-	gcc src/main.c -DMEM_DEBUG -o bin/main
-	@for t in `ls dat/`; do\
-		cat dat/$$t | bin/main; \
-	done
-
 test:
 	@gcc src/main.c -o bin/main;
 	@for t in `ls dat/`; do\
