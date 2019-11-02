@@ -1,6 +1,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int check_adjacence_cell(int **grid, int *flag, int i, int j, int n, int m)
+{
+	if (i>=n || j>=m || i<0 || j<0)
+		return -1;
+
+	int val=0;
+	int was=0, will=0;
+
+	if (!grid[i][j])
+		return 0;
+
+
+	if ((i>0 && grid[i-1][j])) {
+		was++;
+		grid[i][j]=grid[i-1][j];
+	}
+
+	if (j>0 && grid[i][j-1]) {
+		was++;
+		grid[i][j]=grid[i][j-1];
+	}
+
+	if ((i<n-1 && grid[i+1][j]) && !!was) {
+		(*flag)++;
+		will++;
+	}
+
+	if (j<m-1 && grid[i][j+1] && !!was && !will) {
+		(*flag)++;
+	}
+
+	grid[i][j]=-(*flag);
+
+}
+
 int get_count_in_col(int **grid, int j, int n)
 {
 	int i;
@@ -53,9 +88,9 @@ int get_count_in_row(int **grid, int i, int m)
 #endif
 	if (val>1)
 		len++;
-
 	return len;
 }
+
 int get_cont(int **grid, int n, int m)
 {
 	int ret=0;
