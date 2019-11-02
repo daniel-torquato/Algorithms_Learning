@@ -20,7 +20,7 @@ alloc:
 	done
 
 test:
-	gcc src/main.c -o bin/main
+	@gcc src/main.c -o bin/main;
 	@for t in `ls dat/`; do\
 		cat dat/$$t | bin/main > out/$$t.res; \
 		cmp --silent out/$$t.res res/$$t || echo "error $$t"; \
