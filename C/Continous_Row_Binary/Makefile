@@ -1,5 +1,5 @@
 all:
-	gcc src/main.c -o bin/main
+	@gcc src/main.c -o bin/main
 
 debug:
 	gcc src/main.c -DDEBUG -o bin/main
