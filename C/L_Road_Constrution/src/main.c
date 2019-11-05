@@ -1,36 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void alloc_array_int(int **array, int n)
+int *alloc_array_int(int n)
 {
-	*array = (int*) malloc(n*sizeof(int));
+	return (int *) malloc(n*sizeof(int));
 }
 
-void free_array_int(int *array)
+int** alloc_array_ptr(int n)
 {
-	free(array);
+	return (int**) malloc(n*sizeof(int*));
 }
 
-void alloc_array_ptr_int(int ***array, int n)
-{
-	*array = (int**) malloc(n*sizeof(int*));
-}
-
-void free_array_ptr_int(int **array, int n)
-{
-	free(array);
-}
-
-void alloc_matrix_int(int ***matrix, int n, int m)
+int** alloc_matrix_int(int n, int m)
 {
 	int i;
-	*matrix=(int**) malloc(n*sizeof(int*));
+	int **matrix=(int**) malloc(n*sizeof(int*));
 	for (int i = 0; i < n; i++) {
-		(*matrix)[i] = malloc(m*sizeof(int));
+		matrix[i] = malloc(m*sizeof(int));
 	}
+	return matrix;
 }
 
-void free_matrix_int(int **matrix, int n)
+void free_array(int **matrix, int n)
 {
 	for (int i = 0; i < n; i++) {
 		free(matrix[i]);
@@ -120,8 +111,7 @@ int find_worker(int *c, int k, int n)
 int answer(int *a, int *m, int n, int **b, int *c, int k, int **ans)
 {
 	int flag=-1;
-	int **can=NULL;
-	alloc_matrix_int(&can, k, n);
+	int **can=alloc_matrix_int(k, n);
 	for (int i = 0; i < n && flag; i++) {
 		for (int j = 0; j < m[i] && flag; j++) {
 			flag = find_worker(c, k, b[i][j]);
@@ -135,14 +125,14 @@ int answer(int *a, int *m, int n, int **b, int *c, int k, int **ans)
 #endif
 	int *mask;
 	if (flag) {
-		alloc_array_int(&mask, n);
+		mask=alloc_array_int(n);
 #ifdef DEBUG
 		print_matrix_int(can, k, n);
 #endif
 		assign_worker(can, n, k, 0, mask, ans);
 		free(mask);
 	}
-	free_matrix_int(can, k);
+	free_array(can, k);
 	return flag;
 }
 
@@ -152,20 +142,15 @@ int main(int argc, const char *argv[])
 	scanf("%d", &n);
 	scanf("%d", &k);
 
-	int *a=NULL;
-	int *m=NULL;
-	int **b=NULL;
-	int *c=NULL;
-	int **ans=NULL;
-	alloc_array_int(&a, n);
-	alloc_array_int(&m, n);
-	alloc_array_int(&c, k);
-	alloc_array_ptr_int(&b, n);
-	alloc_matrix_int(&ans, k, 2);
+	int *a=alloc_array_int(n);
+	int *m=alloc_array_int(n);
+	int *c=alloc_array_int(k);
+	int **b=alloc_array_ptr(n);
+	int **ans=alloc_matrix_int(k, 2);
 	for (int i = 0; i < n; i++) {
 		scanf("%d", a+i);
 		scanf("%d", m+i);
-		alloc_array_int(b+i, m[i]);
+		b[i]=alloc_array_int(m[i]);
 		for (int j = 0; j < m[i]; j++) {
 			scanf("%d", b[i]+j);
 		}
@@ -184,7 +169,7 @@ int main(int argc, const char *argv[])
 	free(a);
 	free(m);
 	free(c);
-	free_matrix_int(b, n);
-	free_matrix_int(ans, n);
+	free_array(b, n);
+	free_array(ans, n);
 	return 0;
 }
