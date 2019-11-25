@@ -1,5 +1,5 @@
-#ifndef __BST__
-#define __BST__
+#ifndef __BINARY_SEARCH_TREE__
+#define __BINARY_SEARCH_TREE__
 
 struct bst_node {
 	void *key;
