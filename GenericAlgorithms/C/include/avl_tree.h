@@ -1,6 +1,12 @@
 #ifndef __AVL_TREE__
 #define __AVL_TREE__
 
+/*
+# Properties
+1. The sub-trees of every node either differ in height by at most one.
+2. Every sub-tree is an AVL tree.
+*/
+
 struct avl_tree {
 	unsigned height;
 	void *data;
@@ -14,10 +20,10 @@ void insertion (struct avl_tree *tree,
 {
 	struct avl_tree *tmp = tree;
 	while (tmp) {
-		if (cmp(tmp->data, data) > 0)
+		if (cmp (tmp->data, data) > 0)
 			tmp = tmp->right;
 		else
-		if (cmp(tmp->data, data) < 0)
+		if (cmp (tmp->data, data) < 0)
 			tmp = tmp->left;
 		else
 			break;

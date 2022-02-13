@@ -5,7 +5,7 @@ int main(int argc, char **argv)
 {
 	int a = 11;
 
-	int array[]={1,2,3,4};
+	int array[] = {1, 2, 3, 4};
 
 	struct array A;
 
@@ -20,10 +20,10 @@ int main(int argc, char **argv)
 	data_copy(A.data[0], (void*) &tmp);
 	//array_insert(A, 0, (void*) &tmp, data_copy);
 
-	array_print((void*) &A, data_print);
+	array_print ((void*) &A, data_print);
 
-	array_free((void*) &A, fake_free);
+	array_free ((void*) &A, fake_free);
 
 	return 0;
-
+}
 

@@ -1,7 +1,6 @@
 SRCS = $(wildcard src/*.c)
 BINS = $(SRCS: src)
 
-
 array: bin/array include/data.h include/array.h
 
 hash: bin/hash_table include/hash.h
